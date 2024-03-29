@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "github.com/go-redis/redis"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )

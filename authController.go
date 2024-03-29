@@ -45,12 +45,6 @@ func login(c *fiber.Ctx) error {
 		return err
 	}
 
-	//if err := getFromRedis(data, c); err != nil {
-	//	return err
-	//}
-	//var err error
-	//return (err)
-	//}
 	var user User
 	user.Id = data["id"]
 	user.Username = data["username"]
