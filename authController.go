@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -8,7 +10,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const SecretKey = "secret"
+var SecretKey string
+
+func init() {
+	SecretKey = os.Getenv("SECRET_KEY")
+	if SecretKey == "" {
+		log.Fatal("SECRET_KEY environment variable is not set")
+	}
+}
 
 func register(c *fiber.Ctx) error {
 	var data map[string]string
@@ -25,17 +34,16 @@ func register(c *fiber.Ctx) error {
 		Password: string(password),
 	}
 
-	// dont register if user already exists
+	// don't register if user already exists
 	if exist := rdb.Exists(data["id"]).Val(); exist != 0 {
 		return c.JSON(fiber.Map{
 			"message": "user already exists",
 		})
 	}
 	sendToRedis(user)
-	return c.JSON((fiber.Map{
+	return c.JSON(fiber.Map{
 		"message": "success",
-	}))
-
+	})
 }
 
 func login(c *fiber.Ctx) error {
@@ -86,9 +94,9 @@ func login(c *fiber.Ctx) error {
 
 	c.Cookie(&cookie)
 
-	return (c.JSON(fiber.Map{
+	return c.JSON(fiber.Map{
 		"message": "success",
-	}))
+	})
 }
 
 func getUser(c *fiber.Ctx) error {

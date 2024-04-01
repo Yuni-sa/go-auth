@@ -32,7 +32,10 @@ func connectDB() *redis.Client {
 
 	// simple ping / connection check
 	pong, err := rdb.Ping().Result()
-	log.Println(pong, err)
+	if err != nil {
+		log.Fatalf("Could not connect to Redis: %v", err)
+	}
+	log.Printf("Redis connected: %s", pong)
 	return rdb
 }
 
